@@ -1,6 +1,4 @@
-//////////////////////////////////////////////
-ESTRUCTURA JUEGO 3 EN RAYA USANDO CONEXIÓN UDP
-//////////////////////////////////////////////
+# A ESTRUCTURA JUEGO 3 EN RAYA USANDO CONEXIÓN UDP
 
 La estructura cliente-servidor es la siguiente:
 - Una máquina hace de servidor, la cual controlará el flujo del juego (turnos de jugadores
@@ -67,7 +65,7 @@ adicionales de soporte. Lo importante es que no se deberá crear ninguna clase d
 La lógica del cliente es la siguiente (la escribo en pseudocodigo).
 Todo lo escrito como funciones no tiene por que ser funciones a parte en la versión real, sino que es una forma de escribir lo que se debe hacer en esa
 parte del código.
-
+```
     main(){
         
         //Se crea un bucle infinito ya que para parar la ejecución se hará un return en una de las opciones del menú
@@ -113,7 +111,7 @@ parte del código.
             else { mostrarMensajePerdedor();}
         } 
     }
-
+```
 
 Hay que remarcar que no se ha especificado nada de cómo se debe recibir, enviar y tratar la información de los paquetes.
 La info de como hacer eso está en el moodle de XD, en un pdf del laboratorio 3.
@@ -137,43 +135,43 @@ Este atributo será la codificación del tablero antes mencionada (únicamente d
 
 Los métodos que tendrá que contener esta clase són los siguientes:
 
-
-/**
-* Constructor de la clase Tablero. Inicializa el tablero todo a 0
-*
-public Tablero();
-
-
-/**
-* Devuelve el tablero en forma de array de bytes (devolver copia del atributo tablero de la clase)
-* @return tablero en forma de array de bytes
-*
-public byte[] rawTablero();
-
-Para desarrollar el método anterior recomiendo usar el método .clone() que viene incluido en los arrays de cualquier tipo
+```
+    /**
+    * Constructor de la clase Tablero. Inicializa el tablero todo a 0
+    *
+    public Tablero();
 
 
-/**
-* Genera una copia de la clase Tablero
-* @return Tablero copia del Tablero
-*
-public Tablero cpyTablero();
+    /**
+    * Devuelve el tablero en forma de array de bytes (devolver copia del atributo tablero de la clase)
+    * @return tablero en forma de array de bytes
+    *
+    public byte[] rawTablero();
+```
+> Para desarrollar el método anterior recomiendo usar el método .clone() que viene incluido en los arrays de cualquier tipo
 
-Importante, la diferencia de cpyTablero() con el de rawTablero() es que este devuelve una copia de la clase Tablero, no un array de bytes.
-Recomiendo crear un nuevo tablero y inicializarlo con el constructor. Luego crear una copia del array atributo tablero y asignarla al nuevo tablero creado.
+```
+    /**
+    * Genera una copia de la clase Tablero
+    * @return Tablero copia del Tablero
+    *
+    public Tablero cpyTablero();
+```
+> Importante, la diferencia de cpyTablero() con el de rawTablero() es que este devuelve una copia de la clase Tablero, no un array de bytes.
+> Recomiendo crear un nuevo tablero y inicializarlo con el constructor. Luego crear una copia del array atributo tablero y asignarla al nuevo tablero creado.
 
+```
+    /**
+    * Modifica el tablero según el jugador y la posición escogida
+    * @param jugador
+    * @param posicion
+    * @return boolean cierto -> se ha podido hacer la jugada // falso -> no se ha podidio hacer
+    *
+    public boolean jugadaTablero(int jugador, int posicion);
+```
+> Hay que acordarse de que puede que el jugador intente hacer una jugada imposible (colocar su ficha donde ya hay otra).
 
-/**
-* Modifica el tablero según el jugador y la posición escogida
-* @param jugador
-* @param posicion
-* @return boolean cierto -> se ha podido hacer la jugada // falso -> no se ha podidio hacer
-*
-public boolean jugadaTablero(int jugador, int posicion);
-
-Hay que acordarse de que puede que el jugador intente hacer una jugada imposible (colocar su ficha donde ya hay otra).
-
-
+```
 /**
 * Informa del ganador del tablero
 * @return int 0 -> no ha ganado nadie todavía / 1 -> ha ganado el jugador 1 / 2 -> ha ganado el jugador 2
@@ -186,12 +184,13 @@ public int ganador();
 * Imprime por pantalla el tablero actual
 *
 public void imprimirTablero();
+```
+> Para esta función de imprimirTablero se pueden usar prints en pantalla. Sobretodo intentar que quede bonito y facil de leer.
 
-Para esta función de imprimirTablero se pueden usar prints en pantalla. Sobretodo intentar que quede bonito y facil de leer.
 
 
-
-Esas son las funciones que se deben crear para la clase Tablero en un principio. En caso de necesitarse más se avisará.
+Esas son las funciones que s:w
+ue deben crear para la clase Tablero en un principio. En caso de necesitarse más se avisará.
 
 
 
@@ -201,9 +200,10 @@ Esas son las funciones que se deben crear para la clase Tablero en un principio.
 
 Esta clase se intentará que sea la primera en desarollar, por lo que directamente se proporcionará el codigo a continuación cuando
 se acabe.
-
+```
 main(){
     do{
         cocinandoCodigo();
     } while(!morirDeSueño)
 }
+```
