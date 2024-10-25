@@ -1,4 +1,6 @@
+//////////////////////////////////////////////
 ESTRUCTURA JUEGO 3 EN RAYA USANDO CONEXIÓN UDP
+//////////////////////////////////////////////
 
 La estructura cliente-servidor es la siguiente:
 - Una máquina hace de servidor, la cual controlará el flujo del juego (turnos de jugadores
@@ -124,8 +126,84 @@ Relacionado con el tablero, quién haga el cliente también tendrá que saber qu
 Por lo que a continuación está la información sobre la estructura del tablero.
 
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------a
-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
     Clase Tablero
 
-La clase tablero tiene que contener
+
+La clase tablero tiene que contener el siguiente atributo:
+    private byte[] tablero;
+
+Este atributo será la codificación del tablero antes mencionada (únicamente del tablero, por lo que tendrá 9 posiciones)
+
+Los métodos que tendrá que contener esta clase són los siguientes:
+
+
+/**
+* Constructor de la clase Tablero. Inicializa el tablero todo a 0
+*
+public Tablero();
+
+
+/**
+* Devuelve el tablero en forma de array de bytes (devolver copia del atributo tablero de la clase)
+* @return tablero en forma de array de bytes
+*
+public byte[] rawTablero();
+
+Para desarrollar el método anterior recomiendo usar el método .clone() que viene incluido en los arrays de cualquier tipo
+
+
+/**
+* Genera una copia de la clase Tablero
+* @return Tablero copia del Tablero
+*
+public Tablero cpyTablero();
+
+Importante, la diferencia de cpyTablero() con el de rawTablero() es que este devuelve una copia de la clase Tablero, no un array de bytes.
+Recomiendo crear un nuevo tablero y inicializarlo con el constructor. Luego crear una copia del array atributo tablero y asignarla al nuevo tablero creado.
+
+
+/**
+* Modifica el tablero según el jugador y la posición escogida
+* @param jugador
+* @param posicion
+* @return boolean cierto -> se ha podido hacer la jugada // falso -> no se ha podidio hacer
+*
+public boolean jugadaTablero(int jugador, int posicion);
+
+Hay que acordarse de que puede que el jugador intente hacer una jugada imposible (colocar su ficha donde ya hay otra).
+
+
+/**
+* Informa del ganador del tablero
+* @return int 0 -> no ha ganado nadie todavía / 1 -> ha ganado el jugador 1 / 2 -> ha ganado el jugador 2
+*
+public int ganador();
+
+
+
+/**
+* Imprime por pantalla el tablero actual
+*
+public void imprimirTablero();
+
+Para esta función de imprimirTablero se pueden usar prints en pantalla. Sobretodo intentar que quede bonito y facil de leer.
+
+
+
+Esas son las funciones que se deben crear para la clase Tablero en un principio. En caso de necesitarse más se avisará.
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+    CLASE SERVER3ER
+
+Esta clase se intentará que sea la primera en desarollar, por lo que directamente se proporcionará el codigo a continuación cuando
+se acabe.
+
+main(){
+    do{
+        cocinandoCodigo();
+    } while(!morirDeSueño)
+}
