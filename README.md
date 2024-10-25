@@ -1,4 +1,4 @@
-# A ESTRUCTURA JUEGO 3 EN RAYA USANDO CONEXIÓN UDP
+# ESTRUCTURA JUEGO 3 EN RAYA USANDO CONEXIÓN UDP
 
 La estructura cliente-servidor es la siguiente:
 - Una máquina hace de servidor, la cual controlará el flujo del juego (turnos de jugadores
@@ -55,7 +55,7 @@ saber cómo interactuar con la clase Server3ER, pero no hace falta conocer cómo
 se pone en común para el informe y la presentación)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
-# AA Clase Client3ER
+## Clase Client3ER
 
 La clase Client3ER será la que se encargará de contener la rutina main que se ejecutará en la máquina cliente.
 
@@ -125,7 +125,7 @@ Por lo que a continuación está la información sobre la estructura del tablero
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-# AA Clase Tablero
+## Clase Tablero
 
 
 La clase tablero tiene que contener el siguiente atributo:
@@ -195,7 +195,7 @@ Esas son las funciones que se deben crear para la clase Tablero en un principio.
 
 
 ---------------------------------------------------------------------------------------------------------------------------------
-# AA CLASE SERVER3ER
+## CLASE SERVER3ER
 
 Esta clase se intentará que sea la primera en desarollar, por lo que directamente se proporcionará el codigo a continuación cuando
 se acabe.
