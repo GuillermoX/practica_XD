@@ -114,7 +114,7 @@ parte del código.
 ```
 
 Hay que remarcar que no se ha especificado nada de cómo se debe recibir, enviar y tratar la información de los paquetes.
-La info de como hacer eso está en el moodle de XD, en un pdf del laboratorio 3.
+La info de como hacer eso está en el moodle de XD, en [Comunicació entre aplicacions en Java](https://campusvirtual.urv.cat/pluginfile.php/5554516/mod_resource/content/0/XD%20-%20P3%20-%20Comunicaci%C3%B3%20entre%20aplicacions%20en%20Java.pdf).
 
 Importante distinguir la diferencia entre el paquete (donde se incluye el byte de info junto a los bytes de tablero en un mismo array de bytes) y el tablero
 (dónde solo está la info de este en forma de array de bytes también). Yo recomiendo cada vez que se reciba el paquete, desglosarlo en una variable simple byte y
