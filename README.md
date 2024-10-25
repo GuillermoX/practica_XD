@@ -55,7 +55,7 @@ saber cómo interactuar con la clase Server3ER, pero no hace falta conocer cómo
 se pone en común para el informe y la presentación)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Clase Client3ER
+# AA Clase Client3ER
 
 La clase Client3ER será la que se encargará de contener la rutina main que se ejecutará en la máquina cliente.
 
@@ -125,7 +125,7 @@ Por lo que a continuación está la información sobre la estructura del tablero
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Clase Tablero
+# AA Clase Tablero
 
 
 La clase tablero tiene que contener el siguiente atributo:
@@ -189,14 +189,13 @@ public void imprimirTablero();
 
 
 
-Esas son las funciones que s:w
-ue deben crear para la clase Tablero en un principio. En caso de necesitarse más se avisará.
+Esas son las funciones que se deben crear para la clase Tablero en un principio. En caso de necesitarse más se avisará.
 
 
 
 
 ---------------------------------------------------------------------------------------------------------------------------------
-    CLASE SERVER3ER
+# AA CLASE SERVER3ER
 
 Esta clase se intentará que sea la primera en desarollar, por lo que directamente se proporcionará el codigo a continuación cuando
 se acabe.
