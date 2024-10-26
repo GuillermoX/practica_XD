@@ -1,6 +1,8 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Scanner;
+
 
 public class Client3ER{
 	
@@ -18,13 +20,17 @@ public class Client3ER{
 				InetAddress adrecaServidor = InetAddress.getByName(args[0]);
 				int portServidor = Integer.parseInt(args[1]);
 
-
-				byte[] prova = {1,0,0,0,0,0,0,0,0,1};
-				DatagramPacket paquetEnviament = new DatagramPacket(prova, prova.length, adrecaServidor, portServidor);
-				socket.send(paquetEnviament);
-				System.out.println("Enviat");
-				socket.close();
-
+				Scanner scanner = new Scanner(System.in);
+				do{
+					byte[] prova = new byte[10];
+					System.out.println("Intro array:");
+					String array = scanner.nextLine();
+					prova = array.getBytes();	
+					fixArray(prova);
+					DatagramPacket paquetEnviament = new DatagramPacket(prova, prova.length, adrecaServidor, portServidor);
+					socket.send(paquetEnviament);
+					System.out.println("Enviat");
+				}while(true);
 
 			} catch (Exception e){
 				e.printStackTrace();
@@ -35,6 +41,12 @@ public class Client3ER{
 			System.out.println("Introdueix l'adreça i el port del servidor");
 		}
 
+	}
+
+	private static void fixArray(byte[] infoJoc){
+		for (int i = 0; i<infoJoc.length; i++){
+			infoJoc[i] -= '0';
+		}
 	}
 
 

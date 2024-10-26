@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -37,6 +38,15 @@ public class Jugador{
 
 	public void setPort(int pt){
 		port = pt;
+	}
+
+	public void enviaPaquet(byte[] infoJoc, DatagramSocket socket){
+		DatagramPacket paquetSortida = new DatagramPacket(infoJoc, infoJoc.length, address, port);
+		try{
+			socket.send(paquetSortida);
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
 

@@ -25,12 +25,20 @@ byteArray[0] -> Bite de información del estado del juego (A continuación se es
 byteArray[1] hasta byteArray[9] -> Byte del estado del tablero (También se especifica a continuación la codificación)
 
 La posición 0 del array podrá tener los siguientes valores:
-    -1 -> Error de algun tipo (se expandirá en un futuro cuándo haga falta pero probablemente sea información del server hacia el cliente)
-    0 -> Intento de conexión por parte del cliente hacia el servidor
-         Conexión correcta si el servidor retorna este byte a 0
-    1 -> Turno del jugador (información del servidor al jugador)
-    2 -> Partida ganada (información del servidor al jugador)
-    3 -> Partida perdida (información del servidor al jugador)
+    Información que el servidor enviará al Cliente:
+        -3 -> Partida perdida (información del servidor al jugador)
+        -2 -> Partida ganada (información del servidor al jugador)
+        -1 -> Turno del jugador (información del servidor al jugador)
+    Información que el cliente enviará al servidor
+        1 hasta 9 -> posición donde se quiere efectuar la jugada
+
+    Información que tanto cliente como servidor pueden enviar:
+        0 -> Si es del cliente al servidor (intento de conexion)
+             Si es del servidor al cliente (conexión correcta, turno del otro jugador)
+
+Por lo tanto, el servidor enviará paquetes de tamaño de 10 bytes hacia el cliente, pero el cliente enviará sólo un byte de información.
+Esto es debido a que el cliente sólo tiene que indicar en que posición quiere hacer su jugada.
+
 
 En cuanto a las posiciones 1 a 9 del array corresponde a la siguiente distribución en el tablero:
     posición 1, 2, 3 (primera fila)
@@ -81,7 +89,7 @@ parte del código.
                     caso SALIR: detenerEjecucion() //Enchufale un return aqui que no estamos en progra
                 }
                 //Hasta que el servidor no especifique que toca jugar o la conexión es correcta no se iniciará el juego
-                //Se tiene que recibir 1 (toca jugar) o 0 (conexión correcta pero le toca al otro) en el primer byte
+                //Se tiene que recibir -1 (toca jugar) o 0 (conexión correcta pero le toca al otro) en el primer byte
                 if(!conexionCorrecta()) mostrarCodigoError();
             }while(!conexionCorrecta());
 
@@ -95,8 +103,11 @@ parte del código.
             do{ 
                 imprimirTablero();
 
+                do{
 
-                ejecutarJugada(); //Se tiene que modificar el tablero
+                    enviarJugada(); //Se tiene que enviar la jugada al servidor
+                    esperarRespuestaServidor();     //Se tiene que comprovar si la jugada es correcta
+                } while(!jugadaCorrecta);   //Si se recibe de nuevo una respuesta indicando que es nuestro turno (-1)
                 //Se imprime el tablero con tu jugada actual
                 imprimirTablero();
 
@@ -120,6 +131,9 @@ Importante distinguir la diferencia entre el paquete (donde se incluye el byte d
 (dónde solo está la info de este en forma de array de bytes también). Yo recomiendo cada vez que se reciba el paquete, desglosarlo en una variable simple byte y
 el array byte[] que contiene el tablero. 
 
+También hay que remarcar que el paquete que el cliente recibe desde el servidor tiene un tamaño de 10 bytes, ya que dentro tiene la info y el tablero, pero 
+el paquete que el cliente debe enviar al servidor debe sólo contener el byte de información (ya que el cliente no modifica el tablero).
+
 Relacionado con el tablero, quién haga el cliente también tendrá que saber que funcionalidades tiene la clase Tablero, que será desarollada por otra persona.
 Por lo que a continuación está la información sobre la estructura del tablero.
 
@@ -141,6 +155,16 @@ Los métodos que tendrá que contener esta clase són los siguientes:
     *
     public Tablero();
 
+
+    /**
+    * Actualiza la información del tablero con la información del juego
+    * @param infoJuego
+    *
+    public void setTablero(byte[] infoJuego);
+```
+> El método setTablero recibe por parámetro toda la información del juego (byte de info + 9 bytes de tablero).
+> Hace falta que el byte de info se descarte y en el tablero sólo quede la info del tablero.
+```
 
     /**
     * Devuelve el tablero en forma de array de bytes (devolver copia del atributo tablero de la clase)
@@ -167,7 +191,7 @@ Los métodos que tendrá que contener esta clase són los siguientes:
     * @param posicion
     * @return boolean cierto -> se ha podido hacer la jugada // falso -> no se ha podidio hacer
     *
-    public boolean jugadaTablero(int jugador, int posicion);
+    public boolean jugada(int jugador, int posicion);
 ```
 > Hay que acordarse de que puede que el jugador intente hacer una jugada imposible (colocar su ficha donde ya hay otra).
 
