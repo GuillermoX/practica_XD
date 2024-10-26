@@ -21,15 +21,25 @@ public class Client3ER{
 				int portServidor = Integer.parseInt(args[1]);
 
 				Scanner scanner = new Scanner(System.in);
-				do{
-					byte[] prova = new byte[10];
+				do{						
+					byte[] provaEnviar = new byte[10];
 					System.out.println("Intro array:");
 					String array = scanner.nextLine();
-					prova = array.getBytes();	
-					fixArray(prova);
-					DatagramPacket paquetEnviament = new DatagramPacket(prova, prova.length, adrecaServidor, portServidor);
+					provaEnviar = array.getBytes();	
+					fixArray(provaEnviar);
+					DatagramPacket paquetEnviament = new DatagramPacket(provaEnviar, provaEnviar.length, adrecaServidor, portServidor);
 					socket.send(paquetEnviament);
 					System.out.println("Enviat");
+
+					
+					byte[] provaRebre = new byte[10];
+					DatagramPacket paquetRebre = new DatagramPacket(provaRebre, provaRebre.length);
+					socket.receive(paquetRebre);
+					provaRebre = paquetRebre.getData();
+					for(int i = 0; i<provaRebre.length; i++){
+						System.out.printf("%d", provaRebre[i]);
+					}
+					System.out.printf("\n");
 				}while(true);
 
 			} catch (Exception e){
