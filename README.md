@@ -38,7 +38,7 @@ La posición 0 del array podrá tener los siguientes valores:
         0 -> Si es del cliente al servidor (intento de conexion)
              Si es del servidor al cliente (conexión correcta, turno del otro jugador)
 
-> [!NOTE]
+> [!IMPORTANT]
 > Por lo tanto, el servidor enviará paquetes de tamaño de 10 bytes hacia el cliente, pero el cliente enviará sólo un byte de información.
 > Esto es debido a que el cliente sólo tiene que indicar en que posición quiere hacer su jugada.
 
@@ -59,6 +59,10 @@ Sabiendo esto, a continuación se especifica la estructura y lógica del cliente
     - Clase Jugador (sólo se utiliza en el servidor)
 - Clase Tablero
 
+> [!NOTE]
+> Considero que lo mejor será que Alvaro haga la clase Client3ER, Vlad la clase Tablero y yo la clase Server3ER.
+> Además, vereis que vuestras clases ya están con codigo, no os preocupeis, podeis borrarlo sin problema que lo que hay
+> son pruebas mías que he estado haciendo.
 
 Es importante pensar durante el desarollo de cada clase únicamente en esta clase que estamos creando. Quién haga la clase Client3ER debe
 saber cómo interactuar con la clase Server3ER, pero no hace falta conocer cómo esta funciona.
@@ -134,7 +138,7 @@ Importante distinguir la diferencia entre el paquete (donde se incluye el byte d
 (dónde solo está la info de este en forma de array de bytes también). Yo recomiendo cada vez que se reciba el paquete, desglosarlo en una variable simple byte y
 el array byte[] que contiene el tablero. 
 
-> [!NOTE]
+> [!IMPORTANT]
 > También hay que remarcar que el paquete que el cliente recibe desde el servidor tiene un tamaño de 10 bytes, ya que dentro tiene la info y el tablero, pero 
 > el paquete que el cliente debe enviar al servidor debe sólo contener el byte de información (ya que el cliente no modifica el tablero).
 
