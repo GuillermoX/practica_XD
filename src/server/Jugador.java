@@ -1,3 +1,5 @@
+package server;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -44,9 +46,21 @@ public class Jugador{
 		DatagramPacket paquetSortida = new DatagramPacket(infoJoc, infoJoc.length, address, port);
 		try{
 			socket.send(paquetSortida);
-		} catch (IOException e){
-			e.printStackTrace();
-		}
+		} catch (IOException e){e.printStackTrace();}
+	}
+
+	public byte rebrePaquet(DatagramSocket socket){
+		byte[] infoEntrada = new byte[1];
+		DatagramPacket paquetEntrada = new DatagramPacket(infoEntrada, infoEntrada.length);
+		do{
+			try{
+				socket.receive(paquetEntrada);	
+			} catch (IOException e) {e.printStackTrace();}
+			//S'allargará la espera fins que es rebi la resposta del jugador 1
+		} while(!(paquetEntrada.getAddress().equals(this.address)));
+
+		
+		return paquetEntrada.getData()[0];
 	}
 
 

@@ -201,7 +201,9 @@ Los métodos que tendrá que contener esta clase són los siguientes:
     *
     public boolean jugada(int jugador, int posicion);
 ```
+> [!CAUTION]
 > Hay que acordarse de que puede que el jugador intente hacer una jugada imposible (colocar su ficha donde ya hay otra).
+> Muy importante que si el jugador intenta hacer una jugada incorrecta, el tablero no se modifique, debe quedar como estaba.
 
 ```
 /**
