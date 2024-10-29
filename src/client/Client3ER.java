@@ -11,6 +11,9 @@ public class Client3ER
 
 	public static final int P_CONNECT = 1;
 
+
+	static Scanner triar_opcio = new Scanner(System.in);
+
 	public static void main(String[] args)
 	{
 		if(args.length == 2) // Comprovació de paràmetres
@@ -25,13 +28,14 @@ public class Client3ER
 				InetAddress adrecaServidor = InetAddress.getByName(args[0]);
 				int portServidor = Integer.parseInt(args[1]);
 
-				while (true) // Bucle infinit fins que no es tria l'opció de finalitzar connexió
+
+				byte[] arrayEstatJoc = new byte[MIDA_PAQUET];
+
+				while (!connectat) // Bucle infinit fins que no es tria l'opció de finalitzar connexió
 				{ 
 					switch (menu()) 
 					{
 						case 1: // Enviar Paquet inicial de connexió
-					 		if (!connectat) 
-							{ 
 								// Paquet inicialitzador de Connexió entre Client/Servidor
 								byte[] valorIniciConnexio = new byte[P_CONNECT];
 								valorIniciConnexio[0] = 0;	// 0: Indicador d'intent de connexxió per part del Client
@@ -42,12 +46,11 @@ public class Client3ER
 								System.out.println("Intent de Connexió en Tramesa. Espereu resposta...");
 
 								// Paquet de Confirmació de Connexió que rebrem del Servidor3ER
-								byte[] confirmacio = new byte[MIDA_PAQUET];
-								DatagramPacket paquetConnexio = new DatagramPacket(confirmacio, confirmacio.length);
+								DatagramPacket paquetConnexio = new DatagramPacket(arrayEstatJoc, arrayEstatJoc.length);
 
 								socket.receive(paquetConnexio); // Rebem array del Servidor3ER
 
-								if (confirmacio[0] == 0) // Confirmem manualment si s'ha establert connexió
+								if (arrayEstatJoc[0] == 0 || arrayEstatJoc[0] == -1) // Confirmem manualment si s'ha establert connexió
 								{
 									connectat = true;
 									System.out.println("Connexió establerta");
@@ -56,52 +59,7 @@ public class Client3ER
 								{
 									System.out.println("Connexió rebutjada pel servidor");
 								}
-								break;	
-							}
-							else 
-							{
-								System.out.println("Ja s'ha realitzat connexió");
-							}
-							
-						case 2: // Realitzar jugada
-							if (connectat) 
-							{
-								// Rebem per part de Servidor3ER l'estat actual del joc
-								byte[] arrayEstatJoc = new byte[MIDA_PAQUET];
-								DatagramPacket estatActualTauler = new DatagramPacket(arrayEstatJoc, arrayEstatJoc.length);
-								System.out.println("Analitzant Estat Actual de la Partida des del Servidor...");
-								socket.receive(estatActualTauler);
-								imprimirTablero(arrayEstatJoc);
-
-								// Comprovem estats
-								if (arrayEstatJoc[0] == -1) { // Es pot realitzar Jugada
-									// Escanejar Jugada
-								}
-								else 
-								{
-									if (arrayEstatJoc[0] == -2) { // S'ha guanyat
-										System.out.println("Enhorabona! Has Guanyat");
-										connectat = false;
-									}
-									else
-									{
-										if (arrayEstatJoc[0] == -3) { // S'ha perdut
-											System.out.println("Llastima! Has Perdut");
-											connectat = false;
-										}
-										else // Si no es detecta un dels estats de joc esperats
-										{
-											System.out.println("Error detectat en el paquet rebut des del servidor");
-										}
-									}
-								}
-								
-							}
-							else
-							{
-								System.out.println("Connexió Prèvia Requerida Per Jugar");
-							}
-							break;
+								break;			
 
 						case 3: // Desconnexió del Client
 							
@@ -115,6 +73,44 @@ public class Client3ER
 	
 					}
 				}		
+
+				while(true){
+
+					
+					DatagramPacket estatActualTauler = new DatagramPacket(arrayEstatJoc, arrayEstatJoc.length);
+
+					imprimirTablero(arrayEstatJoc);
+
+					// Comprovem estats
+					if (arrayEstatJoc[0] == -1) { // Es pot realitzar Jugada
+						// Escanejar Jugada
+						byte[] infoJugada = new byte[1];
+						System.out.println("Fer jugada");
+						infoJugada[0] = (byte)triar_opcio.nextInt();
+						DatagramPacket paquetJugada = new DatagramPacket(infoJugada, infoJugada.length, adrecaServidor, portServidor);
+						socket.send(paquetJugada);	
+						System.out.println("Esperant confirmació de jugada");
+						socket.receive(estatActualTauler);
+					}
+					else if (arrayEstatJoc[0] == -2) { // S'ha guanyat
+						System.out.println("Enhorabona! Has Guanyat");
+						break;
+					}
+					else if (arrayEstatJoc[0] == -3) { // S'ha perdut
+						System.out.println("Llastima! Has Perdut");
+						break;
+					}
+					else if (arrayEstatJoc[0] == 0) {
+						// Rebem per part de Servidor3ER l'estat actual del joc
+						System.out.println("Esperant a l'altre jugador");
+						socket.receive(estatActualTauler);
+					}	
+
+					
+
+
+
+				}
 			} 
 			catch (Exception e) 
 			{
@@ -137,17 +133,15 @@ public class Client3ER
 	 * @return valor enter indicador de l'opció triada
 	 */
 	private static int menu() {
-		int opcio;
+		int opcio = -1;
 
 		System.out.println("\n\n1- Iniciar Connexió Amb El Servidor");
 		System.out.println("2- Realitzar Jugada (Requereix Connexió Establerta Prèviament)");
 		System.out.println("3- Finalitzar Estat De Connexió i/o Ejecució Del Programa\n");
 
 		System.out.println("Seleccioneu una opció");
-		Scanner triar_opcio = new Scanner(System.in);
-		
+
 		opcio = triar_opcio.nextInt();
-		triar_opcio.close();
 		if (opcio < 1 || opcio > 3) {
 			opcio = -1;
 		}
