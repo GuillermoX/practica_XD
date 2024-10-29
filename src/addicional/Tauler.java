@@ -43,7 +43,7 @@ public class Tauler{
                 System.out.print("|");
 
 			} else if (i<tauler.length-1) {
-				System.out.println("\n----+----+----");  
+				System.out.println("\n---+---+---");  
 			}
         }
         System.out.printf("\n");
