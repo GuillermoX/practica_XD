@@ -29,6 +29,6 @@ public class TaulerTest {
 
         // Verificar ganador
         int ganador = tablero.ganador();
-        System.out.println("\nGanador: " + (ganador == 1 ? "X" : (ganador == 2 ? "O" : "Ninguno")));
+        System.out.println("\nGanador: " + (ganador == 1 ? "1" : (ganador == 2 ? "2" : "Ninguno")));
     }
 }
