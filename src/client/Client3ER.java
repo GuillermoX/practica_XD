@@ -1,4 +1,3 @@
-package client;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -22,6 +21,7 @@ public class Client3ER
 	public static final int P_TORN = -1;
 	public static final int P_GUANYAT = -2; 
 	public static final int P_PERDUT = -3;
+	public static final int P_EMPAT = -4;
 
 	static Scanner triar_opcio = new Scanner(System.in);
 
@@ -102,6 +102,7 @@ public class Client3ER
 						socket.send(paquetJugada);	
 						System.out.println("Esperant confirmació de jugada");
 						socket.receive(estatActualTauler);
+						tauler.setTablero(arrayEstatJoc);
 					}
 					else if (arrayEstatJoc[0] == P_GUANYAT) { // S'ha guanyat
 						System.out.println("Enhorabona! Has Guanyat");
@@ -111,10 +112,15 @@ public class Client3ER
 						System.out.println("Llastima! Has Perdut");
 						break;
 					}
+					else if (arrayEstatJoc[0] == P_EMPAT) { // Empat
+						System.out.println("Empat! Ja es veurà a la pròxima");
+						break;
+					}
 					else if (arrayEstatJoc[0] == P_CONNECT) { // Connexió establerta, però és el torn de l'altre jugador
 						// Rebem per part de Servidor3ER l'estat actual del joc
 						System.out.println("Esperant a l'altre jugador");
 						socket.receive(estatActualTauler);
+						tauler.setTablero(arrayEstatJoc);
 					}
 				}
 			} 
