@@ -27,7 +27,7 @@ public class Server3ER {
 			try{	
 				//Es crea el socket UDP per escoltar la petició del jugador 1
 				DatagramSocket socket = new DatagramSocket(Integer.parseInt(args[0]));
-				System.out.println("Servidor del joc operatiu al port" + args[0] + "!");
+				System.out.println("\nServidor del joc operatiu al port " + args[0] + "!\n");
 				
 				Jugador jugador1 = new Jugador();
 				Jugador jugador2 = new Jugador();
