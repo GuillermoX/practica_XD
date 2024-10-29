@@ -26,26 +26,26 @@ public class Server3ER {
 		if(args.length == 1) {
 			try{	
 				//Es crea el socket UDP per escoltar la petició del jugador 1
+				
 				DatagramSocket socket = new DatagramSocket(Integer.parseInt(args[0]));
-				System.out.println("\nServidor del joc operatiu al port " + args[0] + "!\n");
-				
-				Jugador jugador1 = new Jugador();
-				Jugador jugador2 = new Jugador();
-
-				//S'inicialitza un tauler tot a 0
-				//Array de bytes que s'enviará al client
-				byte[] infoSortida = new byte[MIDA_PAQUET];
-				//Array de bytes que es rep del client
-				byte[] infoEntrada = new byte[1];
-
-				//Paquet que es rebrá del client
-				DatagramPacket paquetEntrada = new DatagramPacket(infoEntrada, infoEntrada.length);
-				
-				
-				boolean esperaJugadors = true;
 				
 				while(true){
+					System.out.println("\nServidor del joc operatiu al port " + args[0] + "!\n");
+				
+					Jugador jugador1 = new Jugador();
+					Jugador jugador2 = new Jugador();
 
+					//S'inicialitza un tauler tot a 0
+					//Array de bytes que s'enviará al client
+					byte[] infoSortida = new byte[MIDA_PAQUET];
+					//Array de bytes que es rep del client
+					byte[] infoEntrada = new byte[1];
+
+					//Paquet que es rebrá del client
+					DatagramPacket paquetEntrada = new DatagramPacket(infoEntrada, infoEntrada.length);
+				
+				
+					boolean esperaJugadors = true;
 					
 					Tauler tauler = new Tauler();
 	
@@ -108,7 +108,6 @@ public class Server3ER {
 							infoEntrada[0] = jugador1.rebrePaquet(socket);	
 						}while(!tauler.jugada(1, infoEntrada[0]));
 						infoSortida[0] = 0;
-						System.out.println("Info enviada cliente" + infoSortida[0]);
 						addTaulerAInfo(tauler, infoSortida);
 						jugador1.enviaPaquet(infoSortida, socket);
 						System.out.println("Jugada jugador 1:");
@@ -126,12 +125,17 @@ public class Server3ER {
 								jugador2.enviaPaquet(infoSortida, socket);
 								infoEntrada[0] = jugador2.rebrePaquet(socket);
 							}while(!tauler.jugada(2, infoEntrada[0]));
-
-							infoSortida[0] = 0;
-							addTaulerAInfo(tauler, infoSortida);
-							jugador2.enviaPaquet(infoSortida, socket);
+							
+							estatJoc = tauler.ganador();
+							if(estatJoc == ESTAT_JOC_EN_MARXA)
+							{
+								infoSortida[0] = 0;
+								addTaulerAInfo(tauler, infoSortida);
+								jugador2.enviaPaquet(infoSortida, socket);
+							}
 						}
 						System.out.println("Jugada jugador 2:");
+						
 					}
 
 					//Quan la partida acaba
