@@ -52,7 +52,7 @@ public class Tauler{
    public boolean jugada(int jugador, int posicion){
         boolean jugadaCorrecta = false;
 
-        if((posicion > 0) && (9 > posicion) && (tauler[posicion-1] == 0)){
+        if((posicion > 0) && (9 >= posicion) && (tauler[posicion-1] == 0)){
             tauler[posicion-1] = (byte)jugador;
             jugadaCorrecta = true;
         }
@@ -75,11 +75,23 @@ public class Tauler{
         if((tauler[0] != 0) && (tauler[0] == tauler[4]) && (tauler[4] == tauler[8])){
             valor = tauler[0];
         }
-        if((tauler[2] != 0) && (tauler[2] == tauler[4]) && (tauler[4] == tauler[6])){
+        else if((tauler[2] != 0) && (tauler[2] == tauler[4]) && (tauler[4] == tauler[6])){
             valor = tauler[2];
         }
 
+        if(valor == 0 && totComplet(tauler)) valor = 3;
+
         return valor;
+    }
+
+
+
+    private static boolean totComplet(byte[] tauler){
+        int nComplets = 0;
+       for(int i = 0; i<tauler.length; i++){
+            if(tauler[i] != 0) nComplets ++;
+       } 
+       return nComplets == 9;
     }
         
 }

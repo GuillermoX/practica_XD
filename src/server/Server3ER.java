@@ -13,6 +13,12 @@ public class Server3ER {
 	public static final int P_TORN = -1;
 	public static final int P_GUANYAT = -2;
 	public static final int P_PERDUT = -3;
+	public static final int P_EMPAT = -4;
+
+	public static final int ESTAT_JOC_EN_MARXA = 0;
+	public static final int ESTAT_GUANYADOR_1 = 1;
+	public static final int ESTAT_GUANYADOR_2 = 2;
+	public static final int ESTAT_EMPAT = 3;
 
 
 	public static void main(String[] args) {
@@ -27,7 +33,6 @@ public class Server3ER {
 				Jugador jugador2 = new Jugador();
 
 				//S'inicialitza un tauler tot a 0
-				Tauler tauler = new Tauler();
 				//Array de bytes que s'enviará al client
 				byte[] infoSortida = new byte[MIDA_PAQUET];
 				//Array de bytes que es rep del client
@@ -38,108 +43,120 @@ public class Server3ER {
 				
 				
 				boolean esperaJugadors = true;
+				
+				while(true){
 
-				do{
-					System.out.println("Esperant que el jugador 1 es connecti");
 					
-					//Es rep el paquet del jugador 1
-					socket.receive(paquetEntrada);
-					//S'obté la informació del paquet rebut
-					infoEntrada = paquetEntrada.getData();
-					//Es guarda l'adreça i port del jugador 1
-					jugador1.setAddress(paquetEntrada.getAddress());	
-					jugador1.setPort(paquetEntrada.getPort());	
-
-					//Si el valor del primer byte no es el codi corresponent a la connexió d'un jugador
-					//es torna a esperar a que entri un jugador
-				} while(infoEntrada[0] != P_CONNECT);
-
-				System.out.println("Jugador 1 connectat");
-
-				do{
-					System.out.println("Esperant que el jugador 2 es connecti");
-					
-					//Es rep el paquet del jugador 1
-					socket.receive(paquetEntrada);
-					//S'obté la informació del paquet rebut
-					infoEntrada = paquetEntrada.getData();
-					//Es guarda l'adreça i port del jugador 1
-					jugador2.setAddress(paquetEntrada.getAddress());	
-					jugador2.setPort(paquetEntrada.getPort());	
-
-					//Si el valor del primer byte no es el codi corresponent a la connexió d'un jugador
-					//es torna a esperar a que entri un jugador
-				} while(infoEntrada[0] != P_CONNECT /*|| (jugador2.getAddress().equals(jugador1.getAddress()))*/);
-				
-				System.out.println(jugador1.getAddress().getHostAddress());
-				System.out.println(jugador2.getAddress().getHostAddress());
-				System.out.println("Jugador 2 connectat");
-				
-				//S'inicialitza la informació de sortida amb tot 0
-				for(int i = 0; i<infoSortida.length; i++){
-					infoSortida[i] = 0;
-				}
-				
-				//Al jugador 2 se li indica que ha d'esperar a que el jugador 1 faci la jugada primer
-				jugador2.enviaPaquet(infoSortida, socket);
-				
-
-				int estatJoc = 0;
-				
-				while(estatJoc == 0){
-					tauler.imprimirTablero();
-					System.out.println("Esperant la jugada del jugador 1");
-					//Es prepara la informació de sortida pel jugador 1
-					infoSortida[0] = P_TORN;
-					addTaulerAInfo(tauler, infoSortida);
+					Tauler tauler = new Tauler();
+	
 					do{
-						
-						jugador1.enviaPaquet(infoSortida, socket);
-						infoEntrada[0] = jugador1.rebrePaquet(socket);	
-					}while(!tauler.jugada(1, infoEntrada[0]));
-					infoSortida[0] = 0;
-					System.out.println("Info enviada cliente" + infoSortida[0]);
-					addTaulerAInfo(tauler, infoSortida);
-					jugador1.enviaPaquet(infoSortida, socket);
-					System.out.println("Jugada jugador 1:");
+						System.out.println("Esperant que el jugador 1 es connecti");
 
-					//Si la partida encara no ha acabat
-					estatJoc = tauler.ganador();
-					if(estatJoc == 0)
-					{		
+						//Es rep el paquet del jugador 1
+						socket.receive(paquetEntrada);
+						//S'obté la informació del paquet rebut
+						infoEntrada = paquetEntrada.getData();
+						//Es guarda l'adreça i port del jugador 1
+						jugador1.setAddress(paquetEntrada.getAddress());	
+						jugador1.setPort(paquetEntrada.getPort());	
+
+						//Si el valor del primer byte no es el codi corresponent a la connexió d'un jugador
+						//es torna a esperar a que entri un jugador
+					} while(infoEntrada[0] != P_CONNECT);
+
+					System.out.println("Jugador 1 connectat");
+
+					do{
+						System.out.println("Esperant que el jugador 2 es connecti");
+
+						//Es rep el paquet del jugador 1
+						socket.receive(paquetEntrada);
+						//S'obté la informació del paquet rebut
+						infoEntrada = paquetEntrada.getData();
+						//Es guarda l'adreça i port del jugador 1
+						jugador2.setAddress(paquetEntrada.getAddress());	
+						jugador2.setPort(paquetEntrada.getPort());	
+
+						//Si el valor del primer byte no es el codi corresponent a la connexió d'un jugador
+						//es torna a esperar a que entri un jugador
+					} while(infoEntrada[0] != P_CONNECT /*|| (jugador2.getAddress().equals(jugador1.getAddress()))*/);
+
+					System.out.println(jugador1.getAddress().getHostAddress());
+					System.out.println(jugador2.getAddress().getHostAddress());
+					System.out.println("Jugador 2 connectat");
+
+					//S'inicialitza la informació de sortida amb tot 0
+					for(int i = 0; i<infoSortida.length; i++){
+						infoSortida[i] = 0;
+					}
+
+					//Al jugador 2 se li indica que ha d'esperar a que el jugador 1 faci la jugada primer
+					jugador2.enviaPaquet(infoSortida, socket);
+
+
+					int estatJoc = 0;
+
+					while(estatJoc == ESTAT_JOC_EN_MARXA){
 						tauler.imprimirTablero();
-						System.out.println("Esperant la jugada del jugador 2");
-						//Es prepara la informació de sortida pel jugador 2
+						System.out.println("Esperant la jugada del jugador 1");
+						//Es prepara la informació de sortida pel jugador 1
 						infoSortida[0] = P_TORN;
 						addTaulerAInfo(tauler, infoSortida);
-						do{	
-							jugador2.enviaPaquet(infoSortida, socket);
-							infoEntrada[0] = jugador2.rebrePaquet(socket);
-						}while(!tauler.jugada(2, infoEntrada[0]));
+						do{
 
+							jugador1.enviaPaquet(infoSortida, socket);
+							infoEntrada[0] = jugador1.rebrePaquet(socket);	
+						}while(!tauler.jugada(1, infoEntrada[0]));
 						infoSortida[0] = 0;
+						System.out.println("Info enviada cliente" + infoSortida[0]);
 						addTaulerAInfo(tauler, infoSortida);
+						jugador1.enviaPaquet(infoSortida, socket);
+						System.out.println("Jugada jugador 1:");
+
+						//Si la partida encara no ha acabat
+						estatJoc = tauler.ganador();
+						if(estatJoc == ESTAT_JOC_EN_MARXA)
+						{		
+							tauler.imprimirTablero();
+							System.out.println("Esperant la jugada del jugador 2");
+							//Es prepara la informació de sortida pel jugador 2
+							infoSortida[0] = P_TORN;
+							addTaulerAInfo(tauler, infoSortida);
+							do{	
+								jugador2.enviaPaquet(infoSortida, socket);
+								infoEntrada[0] = jugador2.rebrePaquet(socket);
+							}while(!tauler.jugada(2, infoEntrada[0]));
+
+							infoSortida[0] = 0;
+							addTaulerAInfo(tauler, infoSortida);
+							jugador2.enviaPaquet(infoSortida, socket);
+						}
+						System.out.println("Jugada jugador 2:");
+					}
+
+					//Quan la partida acaba
+					tauler.imprimirTablero();
+					addTaulerAInfo(tauler, infoSortida);
+					if(estatJoc == ESTAT_GUANYADOR_1) {
+						infoSortida[0] = P_GUANYAT;
+						jugador1.enviaPaquet(infoSortida, socket);
+						infoSortida[0] = P_PERDUT;
 						jugador2.enviaPaquet(infoSortida, socket);
 					}
-					System.out.println("Jugada jugador 2:");
-				}
+					else if (estatJoc == ESTAT_GUANYADOR_2){
+						infoSortida[0] = P_GUANYAT;
+						jugador2.enviaPaquet(infoSortida, socket);
+						infoSortida[0] = P_PERDUT;
+						jugador1.enviaPaquet(infoSortida, socket);
+					}
+					else if(estatJoc == ESTAT_EMPAT){
+						infoSortida[0] = P_EMPAT;
+						jugador1.enviaPaquet(infoSortida, socket);
+						jugador2.enviaPaquet(infoSortida, socket);
+					}
 
-				//Quan la partida acaba
-				tauler.imprimirTablero();
-				addTaulerAInfo(tauler, infoSortida);
-				if(estatJoc == 1) {
-					infoSortida[0] = P_GUANYAT;
-					jugador1.enviaPaquet(infoSortida, socket);
-					infoSortida[0] = P_PERDUT;
-					jugador2.enviaPaquet(infoSortida, socket);
-				}
-				else{
-					infoSortida[0] = P_GUANYAT;
-					jugador2.enviaPaquet(infoSortida, socket);
-					infoSortida[0] = P_PERDUT;
-					jugador1.enviaPaquet(infoSortida, socket);
-				}
 
+				}
 		
 			} catch(Exception e){
 				e.printStackTrace();
