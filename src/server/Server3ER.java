@@ -97,7 +97,10 @@ public class Server3ER {
 						jugador1.enviaPaquet(infoSortida, socket);
 						infoEntrada[0] = jugador1.rebrePaquet(socket);	
 					}while(!tauler.jugada(1, infoEntrada[0]));
-
+					infoSortida[0] = 0;
+					System.out.println("Info enviada cliente" + infoSortida[0]);
+					addTaulerAInfo(tauler, infoSortida);
+					jugador1.enviaPaquet(infoSortida, socket);
 					System.out.println("Jugada jugador 1:");
 
 					//Si la partida encara no ha acabat
@@ -113,8 +116,12 @@ public class Server3ER {
 							jugador2.enviaPaquet(infoSortida, socket);
 							infoEntrada[0] = jugador2.rebrePaquet(socket);
 						}while(!tauler.jugada(2, infoEntrada[0]));
+
+						infoSortida[0] = 0;
+						addTaulerAInfo(tauler, infoSortida);
+						jugador2.enviaPaquet(infoSortida, socket);
 					}
-					System.out.println("Jugada jugador 1:");
+					System.out.println("Jugada jugador 2:");
 				}
 
 				//Quan la partida acaba
