@@ -79,7 +79,8 @@ public class Server3ER {
 
 						//Si el valor del primer byte no es el codi corresponent a la connexió d'un jugador
 						//es torna a esperar a que entri un jugador
-					} while(infoEntrada[0] != P_CONNECT /*|| (jugador2.getAddress().equals(jugador1.getAddress()))*/);
+					} while(infoEntrada[0] != P_CONNECT || ((jugador2.getAddress().equals(jugador1.getAddress())) && 
+														     (jugador2.getPort() == jugador1.getPort())));
 
 					System.out.println(jugador1.getAddress().getHostAddress());
 					System.out.println(jugador2.getAddress().getHostAddress());
