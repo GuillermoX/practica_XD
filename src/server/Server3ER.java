@@ -82,9 +82,9 @@ public class Server3ER {
 					} while(infoEntrada[0] != P_CONNECT || ((jugador2.getAddress().equals(jugador1.getAddress())) && 
 														     (jugador2.getPort() == jugador1.getPort())));
 
-					System.out.println(jugador1.getAddress().getHostAddress());
-					System.out.println(jugador2.getAddress().getHostAddress());
 					System.out.println("Jugador 2 connectat");
+					System.out.println("Jugador 1 - IP: " + jugador1.getAddress().getHostAddress() + "   Port: " + jugador1.getPort());
+					System.out.println("Jugador 2 - IP: " + jugador2.getAddress().getHostAddress() + "   Port: " + jugador2.getPort());
 
 					//S'inicialitza la informació de sortida amb tot 0
 					for(int i = 0; i<infoSortida.length; i++){
@@ -143,18 +143,21 @@ public class Server3ER {
 					tauler.imprimirTablero();
 					addTaulerAInfo(tauler, infoSortida);
 					if(estatJoc == ESTAT_GUANYADOR_1) {
+						System.out.println("Ha guanyat el jugador 1!!");
 						infoSortida[0] = P_GUANYAT;
 						jugador1.enviaPaquet(infoSortida, socket);
 						infoSortida[0] = P_PERDUT;
 						jugador2.enviaPaquet(infoSortida, socket);
 					}
 					else if (estatJoc == ESTAT_GUANYADOR_2){
+						System.out.println("Ha guanyat el jugador 2!!");
 						infoSortida[0] = P_GUANYAT;
 						jugador2.enviaPaquet(infoSortida, socket);
 						infoSortida[0] = P_PERDUT;
 						jugador1.enviaPaquet(infoSortida, socket);
 					}
 					else if(estatJoc == ESTAT_EMPAT){
+						System.out.println("Hi ha hagut un empat!!");
 						infoSortida[0] = P_EMPAT;
 						jugador1.enviaPaquet(infoSortida, socket);
 						jugador2.enviaPaquet(infoSortida, socket);
